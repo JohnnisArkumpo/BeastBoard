@@ -1,4 +1,4 @@
-import pygame
+import pygame as pg
 
 # Globals
 running = True
@@ -9,6 +9,10 @@ def board():
     print(f"I'm a board")
 
 # Avatar function. Add a template function. Create a main character function. Add a loop per level with other avaters
+class Avatar:
+    def __init__(self, name):
+        self.name = name
+        
 def avatar():
     print(f"I'ma  dude! I need a dude function for a lotta dudes!")
 
