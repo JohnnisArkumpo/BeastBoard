@@ -14,7 +14,7 @@ class Avatar:
         self.name = name
         
 def avatar():
-    print(f"I'ma  dude! I need a dude function for a lotta dudes!")
+    print(f"I'm a  dude! I need a dude function for a lotta dudes!")
 
 # Scrolling background
 def bkg():
