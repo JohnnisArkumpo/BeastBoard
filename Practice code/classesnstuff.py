@@ -1,7 +1,7 @@
 class Myclass:
     x=5
 p1 = Myclass()
-print(p1.x)
+# print(p1.x)
 
 class Standin:
     pass
@@ -16,9 +16,10 @@ class Person:
 
 thisDude = Person("John", 23)
 
-thisDude.greeting()
+# thisDude.greeting()
 
 class Sxperhuman:
+    clr = "red"
     def __init__(self,name,position,power_type,team):
         self.name = name
         self.position = position
@@ -30,4 +31,18 @@ class Sxperhuman:
         pass
     def collide(self):
         pass
+
+class Student:
+    def __init__(self,name,grade):
+        self.name = name
+        self.grade = grade
+
+s1 = Student("Anna", "A")
+
+# print(s1.name)
+# print(s1.grade)
+
+s1.grade = "B"
+
+# print(s1.grade)
 
