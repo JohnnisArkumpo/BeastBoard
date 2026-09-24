@@ -32,3 +32,22 @@ s1.grade = "B"
 
 # print(s1.grade)
 
+class Animal:
+    def __init__(self,sound):
+        self.sound = sound
+    def make_sound(self):
+        return f"{self.sound}"
+
+class Dog(Animal):
+    def __init__(self,sound):
+        Animal.__init__(self,sound)
+
+class Cat(Animal):
+    def __init__(self,sound):
+        Animal.__init__(self,sound)
+
+c1 = Cat("Meow")
+d1 = Dog("woof")
+
+for x in (c1,d1):
+    print(f"{x.make_sound}")
