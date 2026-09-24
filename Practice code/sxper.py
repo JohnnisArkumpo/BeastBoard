@@ -1,7 +1,7 @@
 class Sxperhuman:
     clr = "red"
     def __init__(self,name,px,py,power_type,team):
-        self.name = name
+        self.__name = name
         self.x = px
         self.y = py
         self.power_type = power_type
@@ -18,6 +18,8 @@ class Sxperhuman:
         pass
     def voiceline(self):
         return self.power_type, self.team
+    def info(self):
+        return self.__name
 
 class Villian(Sxperhuman):
     def __init__(self,name,px,py,power_type,team):
