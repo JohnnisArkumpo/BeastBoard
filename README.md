@@ -17,10 +17,10 @@
 - Provides levels that change the difficulty
 
 *To-do list*
-[ ] - Create a run function/while loop
-[ ] - Create function for board
-[ ] - Function for avatar
-[ ] - Background function
+[x] - Create a run function/while loop
+[x] - Create function for board
+[x] - Function for avatar
+[x] - Background function
 [ ] - Impact scene function
 
 Review
