@@ -1,4 +1,9 @@
 import pygame as pg
+import avatar as av
+import background as bg
+import board as bd
+import impact_screen as ips
+import pixel_art as px
 
 # Globals
 running = True
