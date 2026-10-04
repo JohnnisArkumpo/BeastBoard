@@ -53,13 +53,13 @@ class Board:
         return self._canvas.canvas_size
 
     def _build_grid_surface(self) -> None:
-        color_a = (210, 210, 210, 95)
-        color_b = (240, 240, 240, 110)
+        color_a = (210, 210, 210, 145)
+        color_b = (240, 240, 240, 165)
         for y in range(self._height):
             for x in range(self._width):
                 rect = pygame.Rect(x * self.cell_size, y * self.cell_size, self.cell_size, self.cell_size)
                 self._grid_surface.fill(color_a if (x + y) % 2 else color_b, rect)
-        line_color = (70, 70, 70, 110)
+        line_color = (70, 70, 70, 155)
         for x in range(self._width + 1):
             px = x * self.cell_size
             pygame.draw.line(self._grid_surface, line_color, (px, 0), (px, self.pixel_height), 1)

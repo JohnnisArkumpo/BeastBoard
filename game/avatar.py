@@ -131,144 +131,141 @@ def _empty_sprite(fill: int = 0) -> list[list[int]]:
     return [[fill for _ in range(16)] for _ in range(16)]
 
 
-def _humanoid_sprite(primary: int, secondary: int, accent: int, facing: str) -> list[list[int]]:
+def _abstract_sprite(primary: int, secondary: int, accent: int, facing: str) -> list[list[int]]:
     sprite = _empty_sprite()
+    for y in range(2, 14):
+        for x in range(3, 13):
+            sprite[y][x] = primary
 
-    for y in range(1, 5):
+    for y in range(4, 7):
         for x in range(5, 11):
-            sprite[y][x] = primary
-    sprite[2][6] = secondary
-    sprite[2][9] = secondary
+            sprite[y][x] = secondary
 
-    for y in range(5, 11):
-        for x in range(6, 10):
-            sprite[y][x] = primary
+    for x in range(5, 11):
+        sprite[9][x] = accent
+        sprite[10][x] = accent
 
-    sprite[5][7] = accent
-    sprite[5][8] = accent
-    sprite[8][7] = secondary
-    sprite[8][8] = secondary
-
-    for y in range(11, 15):
-        sprite[y][6] = primary
-        sprite[y][9] = primary
+    for x, y in ((4, 4), (11, 4), (4, 11), (11, 11)):
+        sprite[y][x] = secondary
 
     if facing == "left":
-        for x in range(2, 7):
-            sprite[7][x] = primary
-        sprite[6][3] = accent
+        for y in range(7, 10):
+            for x in range(0, 4):
+                sprite[y][x] = accent
     elif facing == "right":
-        for x in range(9, 14):
-            sprite[7][x] = primary
-        sprite[6][12] = accent
+        for y in range(7, 10):
+            for x in range(12, 16):
+                sprite[y][x] = accent
     elif facing == "up":
-        for y in range(4, 8):
-            sprite[y][4] = primary
-            sprite[y][11] = primary
+        for y in range(0, 4):
+            for x in range(6, 10):
+                sprite[y][x] = accent
     else:
-        for y in range(6, 10):
-            sprite[y][4] = primary
-            sprite[y][11] = primary
+        for y in range(12, 16):
+            for x in range(6, 10):
+                sprite[y][x] = accent
 
     return sprite
 
 
-def _attack_sprite(base: list[list[int]], facing: str, slash_color: int) -> list[list[int]]:
+def _attack_sprite(base: list[list[int]], facing: str, accent: int) -> list[list[int]]:
     sprite = [row[:] for row in base]
     if facing == "left":
         for x in range(0, 4):
-            sprite[7][x] = slash_color
+            sprite[6][x] = accent
+            sprite[9][x] = accent
     elif facing == "right":
         for x in range(12, 16):
-            sprite[7][x] = slash_color
+            sprite[6][x] = accent
+            sprite[9][x] = accent
     elif facing == "up":
         for y in range(0, 4):
-            sprite[y][7] = slash_color
-            sprite[y][8] = slash_color
+            sprite[y][6] = accent
+            sprite[y][9] = accent
     else:
         for y in range(12, 16):
-            sprite[y][7] = slash_color
-            sprite[y][8] = slash_color
+            sprite[y][6] = accent
+            sprite[y][9] = accent
     return sprite
 
 
-def _death_sprite(body: int, blood: int) -> list[list[int]]:
+def _death_sprite(primary: int, secondary: int, accent: int) -> list[list[int]]:
     sprite = _empty_sprite()
     for x in range(2, 14):
-        sprite[10][x] = body
+        sprite[8][x] = secondary
+        sprite[9][x] = primary
     for x in range(4, 12):
-        sprite[9][x] = blood if x % 2 else body
-    sprite[8][5] = body
-    sprite[8][10] = body
-    sprite[11][6] = body
-    sprite[11][9] = body
+        sprite[10][x] = accent
+    for x, y in ((5, 11), (10, 11), (7, 12), (8, 12)):
+        sprite[y][x] = secondary
     return sprite
 
 
-def _level_up_sprite(base: list[list[int]], glow: int) -> list[list[int]]:
+def _level_up_sprite(base: list[list[int]], accent: int) -> list[list[int]]:
     sprite = [row[:] for row in base]
-    for x, y in ((1, 1), (14, 1), (1, 14), (14, 14), (7, 0), (0, 7), (15, 7), (7, 15), (8, 15)):
-        sprite[y][x] = glow
+    for x, y in ((1, 1), (14, 1), (1, 14), (14, 14), (7, 0), (0, 7), (15, 7), (8, 15)):
+        sprite[y][x] = accent
     return sprite
 
 
-def _boss_sprite() -> dict[str, list[list[int]]]:
+def _boss_sprite(primary: int, secondary: int, accent: int) -> dict[str, list[list[int]]]:
     def body(facing: str) -> list[list[int]]:
         sprite = _empty_sprite()
-        for y in range(2, 13):
-            for x in range(3, 13):
-                sprite[y][x] = 5 if (x + y) % 2 else 9
+        for y in range(2, 14):
+            for x in range(2, 14):
+                sprite[y][x] = primary
+        for y in range(4, 9):
+            for x in range(4, 12):
+                sprite[y][x] = secondary
+        for y in range(9, 12):
+            for x in range(5, 11):
+                sprite[y][x] = accent
 
-        for x in (5, 10):
-            sprite[1][x] = 7
-            sprite[0][x] = 7
-
-        sprite[4][6] = 2
-        sprite[4][9] = 2
-        for x in range(6, 10):
-            sprite[8][x] = 4
-
-        for y in range(13, 16):
-            sprite[y][5] = 9
-            sprite[y][10] = 9
+        for x in range(4, 7):
+            sprite[1][x] = accent
+        for x in range(9, 12):
+            sprite[1][x] = accent
 
         if facing == "left":
-            for y in range(7, 12):
-                sprite[y][2] = 7
+            for y in range(6, 12):
+                sprite[y][0] = accent
+                sprite[y][1] = accent
         elif facing == "right":
-            for y in range(7, 12):
-                sprite[y][13] = 7
+            for y in range(6, 12):
+                sprite[y][14] = accent
+                sprite[y][15] = accent
         elif facing == "up":
             for x in range(6, 10):
-                sprite[1][x] = 7
+                sprite[0][x] = accent
         else:
             for x in range(6, 10):
-                sprite[14][x] = 7
+                sprite[14][x] = accent
+                sprite[15][x] = accent
 
         return sprite
 
-    right = body("right")
+    down = body("down")
     return {
         "up": body("up"),
-        "down": body("down"),
+        "down": down,
         "left": body("left"),
-        "right": right,
-        "attack": _attack_sprite(right, "right", 7),
-        "death": _death_sprite(9, 5),
-        "level_up": _level_up_sprite(right, 7),
+        "right": body("right"),
+        "attack": _attack_sprite(down, "down", accent),
+        "death": _death_sprite(primary, secondary, accent),
+        "level_up": _level_up_sprite(down, accent),
     }
 
 
-def _sprite_map(primary: int, secondary: int, accent: int, slash: int) -> dict[str, list[list[int]]]:
-    down = _humanoid_sprite(primary, secondary, accent, "down")
+def _sprite_map(primary: int, secondary: int, accent: int) -> dict[str, list[list[int]]]:
+    down = _abstract_sprite(primary, secondary, accent, "down")
     return {
-        "up": _humanoid_sprite(primary, secondary, accent, "up"),
+        "up": _abstract_sprite(primary, secondary, accent, "up"),
         "down": down,
-        "left": _humanoid_sprite(primary, secondary, accent, "left"),
-        "right": _humanoid_sprite(primary, secondary, accent, "right"),
-        "attack": _attack_sprite(_humanoid_sprite(primary, secondary, accent, "right"), "right", slash),
-        "death": _death_sprite(primary, accent),
-        "level_up": _level_up_sprite(down, slash),
+        "left": _abstract_sprite(primary, secondary, accent, "left"),
+        "right": _abstract_sprite(primary, secondary, accent, "right"),
+        "attack": _attack_sprite(down, "down", accent),
+        "death": _death_sprite(primary, secondary, accent),
+        "level_up": _level_up_sprite(down, accent),
     }
 
 
@@ -288,10 +285,12 @@ class Character:
         self._x = x
         self._y = y
         self._pixel_art = pixel_art or PixelArt()
-        self._sprites = sprites or _sprite_map(2, 1, 4, 7)
+        self._sprites = sprites or _sprite_map(10, 11, 12)
         self._sprite_cache: dict[str, pygame.Surface] = {}
 
         self._state = "down"
+        self._default_state = "down"
+        self._state_until = 0.0
         self._alive = True
         self._visible = True
         self._death_until = 0.0
@@ -321,8 +320,17 @@ class Character:
         return self._state
 
     def set_state(self, state: str) -> None:
-        if state in self._sprites:
-            self._state = state
+        self.set_state_for(state)
+
+    def set_state_for(self, state: str, *, duration: float = 3.5, now: float | None = None) -> None:
+        if state not in self._sprites:
+            return
+        self._state = state
+        if state == self._default_state:
+            self._state_until = 0.0
+            return
+        current = time.monotonic() if now is None else now
+        self._state_until = current + max(0.0, duration)
 
     def set_position(self, x: int, y: int) -> None:
         self._x, self._y = x, y
@@ -330,7 +338,8 @@ class Character:
     def revive(self) -> None:
         self._alive = True
         self._visible = True
-        self._state = "down"
+        self._state = self._default_state
+        self._state_until = 0.0
         self._death_until = 0.0
 
     def place_on_board(self, board: Board) -> None:
@@ -344,14 +353,18 @@ class Character:
             return
         self._alive = False
         self._state = "death"
+        self._state_until = 0.0
         current = time.monotonic() if now is None else now
         self._death_until = current + max(0.1, duration)
 
     def update(self, board: Board, *, now: float | None = None) -> None:
-        if self._alive or not self._visible:
+        if not self._visible:
             return
         current = time.monotonic() if now is None else now
-        if current >= self._death_until:
+        if self._alive and self._state != self._default_state and current >= self._state_until:
+            self._state = self._default_state
+            self._state_until = 0.0
+        if not self._alive and current >= self._death_until:
             self._visible = False
             board.clear_occupied(self._x, self._y)
 
@@ -374,7 +387,7 @@ class Avatar(Character):
     """Player-controlled character and progression stats."""
 
     def __init__(self, name: str, x: int, y: int, *, pixel_art: PixelArt | None = None) -> None:
-        super().__init__(name, x, y, pixel_art=pixel_art, sprites=_sprite_map(2, 1, 4, 7))
+        super().__init__(name, x, y, pixel_art=pixel_art, sprites=_sprite_map(10, 11, 12))
         self._state = "down"
         self.level = 1
         self.total_defeats = 0
@@ -396,7 +409,7 @@ class Avatar(Character):
             gained += 1
             self.pending_level_ups += 1
             self._next_level_total += defeats_required_for_level(self.level)
-            self._state = "level_up"
+            self.set_state_for("level_up")
         return gained
 
     def apply_level_up(self, option: int, attack_choice: str | None = None) -> bool:
@@ -414,7 +427,7 @@ class Avatar(Character):
             return False
 
         self.pending_level_ups -= 1
-        self._state = "down"
+        self.set_state_for("down")
         return True
 
     def choose_combat_choice(self) -> str:
@@ -431,7 +444,7 @@ class Avatar(Character):
         target_y = self._y + dy
         if board.replace_occupied((self._x, self._y), (target_x, target_y)):
             self._x, self._y = target_x, target_y
-            self._state = facing
+            self.set_state_for(facing)
             return True
         return False
 
@@ -440,10 +453,10 @@ class Villain(Character):
     """Enemy character with random combat choices."""
 
     _VARIANT_COLORS = (
-        (5, 1, 7, 7),
-        (6, 2, 7, 7),
-        (8, 2, 9, 7),
-        (9, 2, 5, 7),
+        (13, 14, 15),
+        (16, 13, 15),
+        (17, 14, 18),
+        (14, 17, 15),
     )
 
     def __init__(
@@ -458,7 +471,7 @@ class Villain(Character):
         rng: random.Random | None = None,
         is_boss: bool = False,
     ) -> None:
-        sprites = _boss_sprite() if is_boss else _sprite_map(*self._VARIANT_COLORS[variant_index % len(self._VARIANT_COLORS)])
+        sprites = _boss_sprite(5, 14, 15) if is_boss else _sprite_map(*self._VARIANT_COLORS[variant_index % len(self._VARIANT_COLORS)])
         super().__init__(name, x, y, pixel_art=pixel_art, sprites=sprites)
         self._rng = rng or random.Random()
         self.is_boss = is_boss
@@ -488,7 +501,7 @@ class Villain(Character):
         if self.lives <= 0:
             self.begin_death(now=now)
             return True
-        self._state = "attack"
+        self.set_state_for("attack", now=now)
         return False
 
 
