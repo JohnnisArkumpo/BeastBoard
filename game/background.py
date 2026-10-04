@@ -16,24 +16,67 @@ class Background:
     def __init__(self, pixel_art: PixelArt | None = None) -> None:
         self._pixel_art = pixel_art or PixelArt()
         self._art_by_level: dict[int, list[list[int]]] = {
-            1: self._make_checker(6, 3),
-            2: self._make_stripes(8, 9),
-            3: self._make_diagonal(5, 4),
+            1: self._level_one(),
+            2: self._level_two(),
+            3: self._level_three(),
+            4: self._level_four(),
+            5: self._level_five(),
         }
         self._cache: dict[int, pygame.Surface] = {}
         self._level = 1
 
     @staticmethod
-    def _make_checker(primary: int, secondary: int, size: int = 32) -> list[list[int]]:
-        return [[primary if (x + y) % 2 else secondary for x in range(size)] for y in range(size)]
+    def _size() -> int:
+        return 40
 
-    @staticmethod
-    def _make_stripes(primary: int, secondary: int, size: int = 32) -> list[list[int]]:
-        return [[primary if (x // 2) % 2 else secondary for x in range(size)] for _ in range(size)]
+    @classmethod
+    def _frame(cls, inner_fn) -> list[list[int]]:
+        size = cls._size()
+        art: list[list[int]] = []
+        for y in range(size):
+            row: list[int] = []
+            for x in range(size):
+                if x in (0, 1, size - 2, size - 1) or y in (0, 1, size - 2, size - 1):
+                    row.append(2)
+                else:
+                    row.append(inner_fn(x, y, size))
+            art.append(row)
+        return art
 
-    @staticmethod
-    def _make_diagonal(primary: int, secondary: int, size: int = 32) -> list[list[int]]:
-        return [[primary if (x - y) % 5 in (0, 1) else secondary for x in range(size)] for y in range(size)]
+    @classmethod
+    def _level_one(cls) -> list[list[int]]:
+        return cls._frame(lambda x, y, _: 8 if (x + y) % 4 in (0, 1) else 3)
+
+    @classmethod
+    def _level_two(cls) -> list[list[int]]:
+        return cls._frame(lambda x, y, _: 6 if (x // 2 + y // 3) % 2 else 9)
+
+    @classmethod
+    def _level_three(cls) -> list[list[int]]:
+        def fill(x: int, y: int, size: int) -> int:
+            center = size // 2
+            ring = abs(x - center) + abs(y - center)
+            if ring < size // 6:
+                return 7
+            return 8 if (x - y) % 5 in (0, 1) else 4
+
+        return cls._frame(fill)
+
+    @classmethod
+    def _level_four(cls) -> list[list[int]]:
+        return cls._frame(lambda x, y, _: 7 if (x % 6 == 0 or y % 6 == 0) else 9)
+
+    @classmethod
+    def _level_five(cls) -> list[list[int]]:
+        def fill(x: int, y: int, size: int) -> int:
+            wave = (x * 3 + y * 2) % 9
+            if wave in (0, 1, 2):
+                return 5
+            if abs(x - y) % 7 == 0 or abs((size - 1 - x) - y) % 7 == 0:
+                return 7
+            return 4
+
+        return cls._frame(fill)
 
     @property
     def level(self) -> int:
