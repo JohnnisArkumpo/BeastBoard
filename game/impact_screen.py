@@ -15,8 +15,8 @@ except ImportError:  # pragma: no cover - script import fallback
 class ImpactScreen:
     """Displays pixel-art overlays in front of gameplay."""
 
-    SHORT_DURATION = 0.8
-    LONG_DURATION = 1.6
+    SHORT_DURATION = 2.6
+    LONG_DURATION = 4.0
 
     def __init__(self, pixel_art: PixelArt | None = None) -> None:
         self._pixel_art = pixel_art or PixelArt()
@@ -33,8 +33,8 @@ class ImpactScreen:
         self._active_until: float = 0.0
 
     @staticmethod
-    def _blank(size: int = 40) -> list[list[int]]:
-        return [[0 for _ in range(size)] for _ in range(size)]
+    def _blank(size: int = 40, fill: int = 0) -> list[list[int]]:
+        return [[fill for _ in range(size)] for _ in range(size)]
 
     @staticmethod
     def _draw_box(art: list[list[int]], x0: int, y0: int, x1: int, y1: int, color: int, fill: int | None = None) -> None:
@@ -47,74 +47,84 @@ class ImpactScreen:
 
     @classmethod
     def _level_up_art(cls) -> list[list[int]]:
-        art = cls._blank()
-        cls._draw_box(art, 15, 12, 24, 28, 2, 1)
-        art[14][18] = 7
-        art[14][21] = 7
-        for y in range(17, 23):
-            art[y][13] = 8
-            art[y][26] = 8
-        for px in ((11, 11), (28, 11), (11, 28), (28, 28), (19, 9), (19, 31)):
-            art[px[1]][px[0]] = 7
+        art = cls._blank(fill=11)
+        for y in range(40):
+            for x in range(40):
+                if (x + y) % 6 == 0:
+                    art[y][x] = 12
+        cls._draw_box(art, 15, 12, 24, 28, 10, 11)
+        for x, y in ((18, 10), (21, 10), (14, 16), (25, 16), (14, 24), (25, 24), (19, 30), (20, 30)):
+            art[y][x] = 7
         return art
 
     @classmethod
     def _door_ready_art(cls) -> list[list[int]]:
-        art = cls._blank()
-        cls._draw_box(art, 14, 9, 25, 30, 7, 9)
-        cls._draw_box(art, 16, 12, 23, 29, 2, 4)
-        art[22][20] = 7
-        for i in range(5):
-            art[18][7 + i] = 8
-            art[18][32 - i] = 8
+        art = cls._blank(fill=3)
+        for y in range(40):
+            for x in range(40):
+                if y > 24 and (x + y) % 3 == 0:
+                    art[y][x] = 8
+        cls._draw_box(art, 14, 8, 25, 31, 7, 9)
+        cls._draw_box(art, 16, 11, 23, 30, 2, 4)
+        art[21][21] = 7
+        for i in range(7):
+            art[18][6 + i] = 2
+            art[18][33 - i] = 2
         return art
 
     @classmethod
     def _door_enter_art(cls) -> list[list[int]]:
         art = cls._door_ready_art()
-        cls._draw_box(art, 17, 17, 22, 28, 1, 2)
-        art[18][19] = 4
-        art[18][20] = 4
-        for y in range(14, 18):
-            art[y][15] = 8
-            art[y][24] = 8
+        cls._draw_box(art, 17, 16, 22, 29, 10, 11)
+        art[18][19] = 12
+        art[18][20] = 12
+        art[22][18] = 12
+        art[22][21] = 12
         return art
 
     @classmethod
     def _final_kill_art(cls) -> list[list[int]]:
-        art = cls._blank()
-        cls._draw_box(art, 6, 12, 14, 24, 2, 1)
-        for x in range(16, 26):
-            art[18][x] = 7
-            art[19][x] = 7
-        cls._draw_box(art, 27, 16, 34, 25, 5, 4)
-        for x in range(27, 35):
-            art[26][x] = 5
+        art = cls._blank(fill=4)
+        for y in range(40):
+            for x in range(40):
+                if (x - y) % 8 == 0:
+                    art[y][x] = 9
+        cls._draw_box(art, 5, 11, 14, 25, 10, 11)
+        for x in range(16, 27):
+            art[18][x] = 15
+            art[19][x] = 15
+        cls._draw_box(art, 27, 15, 35, 26, 13, 14)
+        for x in range(27, 36):
+            art[27][x] = 13
         return art
 
     @classmethod
     def _avatar_death_art(cls) -> list[list[int]]:
-        art = cls._blank()
-        cls._draw_box(art, 6, 10, 14, 24, 5, 9)
-        for x in range(16, 26):
-            art[17][x] = 5
-            art[18][x] = 5
-        cls._draw_box(art, 27, 17, 34, 25, 2, 1)
-        for x in range(27, 35):
-            art[26][x] = 2
+        art = cls._blank(fill=14)
+        for y in range(40):
+            for x in range(40):
+                if (x + y) % 5 == 0:
+                    art[y][x] = 17
+        cls._draw_box(art, 5, 10, 14, 24, 13, 14)
+        for x in range(16, 27):
+            art[17][x] = 17
+            art[18][x] = 17
+        cls._draw_box(art, 27, 16, 35, 26, 10, 11)
+        for x in range(27, 36):
+            art[27][x] = 10
         return art
 
     @classmethod
     def _boss_damage_art(cls) -> list[list[int]]:
-        art = cls._blank()
+        art = cls._blank(fill=9)
         center = 20
         art[center][center] = 2
-        for i in range(1, 8):
+        for i in range(1, 12):
             art[center][center - i] = 7
             art[center][center + i] = 7
             art[center - i][center] = 7
             art[center + i][center] = 7
-            if i < 6:
+            if i <= 10:
                 art[center - i][center - i] = 5
                 art[center + i][center + i] = 5
                 art[center - i][center + i] = 5

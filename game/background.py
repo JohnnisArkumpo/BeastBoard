@@ -45,34 +45,68 @@ class Background:
 
     @classmethod
     def _level_one(cls) -> list[list[int]]:
-        return cls._frame(lambda x, y, _: 8 if (x + y) % 4 in (0, 1) else 3)
+        def fill(x: int, y: int, size: int) -> int:
+            horizon = int(size * 0.52)
+            if y < horizon:
+                return 6 if (x + y) % 7 else 2
+            ridge = horizon + ((x // 3) % 3)
+            if y < ridge:
+                return 3
+            return 8 if (x + y) % 5 else 7
+
+        return cls._frame(fill)
 
     @classmethod
     def _level_two(cls) -> list[list[int]]:
-        return cls._frame(lambda x, y, _: 6 if (x // 2 + y // 3) % 2 else 9)
+        def fill(x: int, y: int, size: int) -> int:
+            horizon = int(size * 0.46)
+            if y < horizon:
+                return 6 if (x + (y * 2)) % 6 else 2
+            dune = horizon + ((x // 2) % 4)
+            if y < dune:
+                return 7
+            return 9 if (x // 2 + y // 3) % 3 else 3
+
+        return cls._frame(fill)
 
     @classmethod
     def _level_three(cls) -> list[list[int]]:
         def fill(x: int, y: int, size: int) -> int:
-            center = size // 2
-            ring = abs(x - center) + abs(y - center)
-            if ring < size // 6:
+            horizon = int(size * 0.5)
+            if y < horizon:
+                return 6 if (x + y) % 6 else 2
+            center = (size // 2, horizon + 4)
+            ring = abs(x - center[0]) + abs(y - center[1])
+            if ring < 6:
                 return 7
-            return 8 if (x - y) % 5 in (0, 1) else 4
+            if y > horizon + ((x % 4) + 2):
+                return 8
+            return 4
 
         return cls._frame(fill)
 
     @classmethod
     def _level_four(cls) -> list[list[int]]:
-        return cls._frame(lambda x, y, _: 7 if (x % 6 == 0 or y % 6 == 0) else 9)
+        def fill(x: int, y: int, size: int) -> int:
+            horizon = int(size * 0.42)
+            if y < horizon:
+                return 9 if (x + y) % 5 else 2
+            if y < horizon + (x % 5):
+                return 4
+            return 7 if (x + (y * 3)) % 4 else 5
+
+        return cls._frame(fill)
 
     @classmethod
     def _level_five(cls) -> list[list[int]]:
         def fill(x: int, y: int, size: int) -> int:
-            wave = (x * 3 + y * 2) % 9
-            if wave in (0, 1, 2):
+            horizon = int(size * 0.4)
+            if y < horizon:
+                return 9 if (x + y) % 5 else 2
+            lava = (x * 3 + y * 2) % 9
+            if lava in (0, 1, 2, 3):
                 return 5
-            if abs(x - y) % 7 == 0 or abs((size - 1 - x) - y) % 7 == 0:
+            if abs(x - y) % 7 == 0 or abs((size - 1 - x) - y) % 7 == 0 or y > horizon + 10:
                 return 7
             return 4
 
