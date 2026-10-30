@@ -1,3 +1,5 @@
+# Pixel grids
+
 PLAYER_NEUT = [
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
@@ -25,6 +27,14 @@ PLAYER_NEUT = [
     [0,0,0,0,6,6,6,6,4,1,1,1,1,1,1,1,1,4,6,6,6,6,0,0,0,0],
 ]
 
+PLAYER_ATK = [
+    # empty for now
+]
+
+PLAYER_DEATH = []
+
+PLAYER_LVL = []
+
 PLAYER_SPRITES = {
     "up": PLAYER_NEUT,
     "down": PLAYER_NEUT,
@@ -33,4 +43,18 @@ PLAYER_SPRITES = {
     "attack": PLAYER_NEUT,
     "death": PLAYER_NEUT,
     "level_up": PLAYER_NEUT,
+}
+
+ENEMY_SPRITES = {
+    "up": PLAYER_NEUT,
+    "down": PLAYER_NEUT,
+    "left": PLAYER_NEUT,
+    "right": PLAYER_NEUT,
+    "attack": PLAYER_NEUT,
+    "death": PLAYER_NEUT,
+    "level_up": PLAYER_NEUT,
+}
+
+BOSS_SPRITES = {
+    "up": PLAYER_NEUT
 }

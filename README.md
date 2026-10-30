@@ -21,6 +21,4 @@
 [x] - Create function for board
 [x] - Function for avatar
 [x] - Background function
-[ ] - Impact scene function
-
-<!-- This is too hard. I will need AI for the finishing of this project in time. This is a save stamp to show where the AI starts so that I can revert back here after the project has been submitted -->
+[X] - Impact scene function

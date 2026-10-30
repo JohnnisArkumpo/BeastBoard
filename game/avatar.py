@@ -453,10 +453,10 @@ class Villain(Character):
     """Enemy character with random combat choices."""
 
     _VARIANT_COLORS = (
-        (13, 14, 15),
-        (16, 13, 15),
-        (17, 14, 18),
-        (14, 17, 15),
+        (1, 2, 3),
+        (3, 5, 6),
+        (2, 5, 3),
+        (4, 6, 3),
     )
 
     def __init__(
