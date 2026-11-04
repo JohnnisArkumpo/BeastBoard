@@ -10,6 +10,11 @@ from typing import TYPE_CHECKING
 import pygame
 
 try:
+    from .art import PLAYER_SPRITES, ENEMY_SPRITES
+except ImportError:
+    from art import PLAYER_SPRITES, ENEMY_SPRITES
+
+try:
     from .pixel_art import PixelArt
 except ImportError:  # pragma: no cover - script import fallback
     from pixel_art import PixelArt
